@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="grid filter">
+    <div class="col-5 grid sort-order">
+      <div *ngFor="let fund of fundTypes" class="filter-checkbox">
+        <p-radioButton [inputId]="fund.key.toString()" name="fund.value" [value]="fund.key"
+          (onClick)="onFundTypeChange(fund.key)" [(ngModel)]="selectedFundType"></p-radioButton>
+        <label [for]="fund.key">{{fund.name}}</label>
+      </div>
+    </div>
+    <div class="col-3 grid sort-order">
+      <div class="sort">Sort By:</div>
+      <p-dropdown [options]="sortColumns" [(ngModel)]="sortBy" optionLabel="name"></p-dropdown>
+    </div>
+    <div class="col-3 grid sort-order">
+      <div *ngFor="let year of years" class="filter-checkbox">
+        <p-radioButton [inputId]="year.key" name="year.value" [value]="year.key" [(ngModel)]="selectedYear"
+          (onClick)="onYearChange(year.key)"></p-radioButton>
+        <label [for]="year.key">{{year.name}}</label>
+      </div>
+    </div>
+    <div class="col-1 sort-order">
+      <div class="sorting" (click)="changeSortType()">
+        <div *ngIf="isAsc"> <i class="pi pi-arrow-up" style="font-size: 14px; 
+          font-weight: 700;"> </i> Asc</div>
+        <div *ngIf="!isAsc"> <i class="pi pi-arrow-down" style="font-size: 14px;
+          font-weight: 700;"> </i> Desc</div>
+      </div>
+    </div>
+  </div>
+  <app-grid [url]="url" [columnDefs]="gridColumn" (actionBtnClickedEvent)="onActionClick($event)"
+    [actionButtonsDefs]="buttons" [isHeaderVisible]="false"></app-grid>
+</div>
+
+<p-dialog header="Message" [(visible)]="display" [style]="{width: '50vw'}">
+  <div style="text-align: center;">
+  <span>{{'label_coming_soon' | translate}}</span> <span style="font-weight: 600;"> {{schemeName}}</span>
+</div>
+</p-dialog>

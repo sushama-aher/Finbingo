@@ -1,0 +1,70 @@
+<div class="mi-grid-component">
+  <p-table #dt [ngClass]="isDetailScreen ? 'detail-screen-available' : ''" [lazy]="true" [rows]="paginationPageSize"
+    [metaKeySelection]="true" [value]="datasource" [paginator]="pagination" [totalRecords]="totalRecords"
+    (onLazyLoad)="loadDatasourceLazy($event)" [selectionMode]="rowSelection" (onRowSelect)="onRowSelect($event)"
+    [(selection)]="selectedRecords" [resizableColumns]="enableResize" [first]="dt.first">
+
+    <ng-template pTemplate="header"  *ngIf="isHeaderVisible">
+      <tr>
+        <ng-container *ngFor="let col of columnDefs; let colId=index;">
+
+          <th *ngIf="col.resize && enableResize" [ngClass]="col?.class ? col.class : ''" pResizableColumn
+            [pSortableColumn]="(col?.sort) ? col.sortId: ''" [width]="col?.width" id="th{{colId}}">
+            {{col.header}}
+            <p-sortIcon aria-hidden="true" *ngIf="col?.sort" [field]="col.sortId"></p-sortIcon>
+          </th>
+
+          <th *ngIf="!col.resize" [ngClass]="col?.class ? col.class : ''"
+            [pSortableColumn]="(col?.sort) ? col.sortId: ''">
+            {{col.header}}
+            <p-sortIcon aria-hidden="true" *ngIf="col?.sort" [field]="col.sortId"></p-sortIcon>
+          </th>
+        </ng-container>
+
+        <th class="action-column" *ngIf="actionButtonsDefs.length" [width]="actionButtonWidth">
+          {{ 'label_action' | translate }}
+        </th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td class="grid-align-center" *ngIf="actionButtonsDefs.length === 0" [attr.colspan]="columnDefs.length"
+          headers='th0'>
+          {{ 'label_no_records_found' | translate }}
+        </td>
+        <td class="grid-align-center" *ngIf="actionButtonsDefs.length > 0" [attr.colspan]="columnDefs.length + 1"
+          headers='th0'>
+          {{ 'label_no_records_found' | translate }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columnDefs" let-rowIndex="rowIndex">
+      <tr [class]="rowIndex%2==0?'even-row':'odd-row'">
+        <td *ngFor="let col of columnDefs" [ngClass]="col?.class ? col.class : ''">
+          <div class="single-line-comment" title="{{rowData[col.field]}}" style="-webkit-box-orient: vertical;"
+            *ngIf="col.cellRendererHtml == undefined" [innerHTML]="rowData[col.field]">
+          </div>
+          <div class="single-line-comment" style="-webkit-box-orient: vertical;"
+            *ngIf="col.cellRendererHtml != undefined && !col.disableInnerHtml"
+            [innerHtml]="rowData[col.field].innerHTML | keepHtml">
+          </div>
+          <div class="single-line-comment" style="-webkit-box-orient: vertical;" onclick="event.stopPropagation();"
+            *ngIf="col.cellRendererHtml != undefined && col.disableInnerHtml"
+            [innerHtml]="rowData[col.field] | keepHtml">
+          </div>
+        </td>
+
+        <td class="grid-action-buttons" *ngIf="actionButtonsDefs.length">
+          <div class="grid-action">
+            <div class="btn-div" *ngFor="let btn of actionButtonsDefs">
+              <p-button class="btn-action"  [icon]="rowData[btn.icon]"
+                (click)="actionBtnClick($event, rowData, btn.class)" [label]="rowData[btn.label]">
+              </p-button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
