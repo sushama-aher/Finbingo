@@ -60,7 +60,6 @@ export class InvestmentComponent implements OnInit {
   }
 
   onActionClick(event: any) {
-    debugger
     switch (event.class) {
       case 'BUY':
         this.onBuyClick(event.row);
@@ -82,7 +81,7 @@ export class InvestmentComponent implements OnInit {
     <div class="col-6 nav-details">
     <div class="nav"><span class="nav">NAV</span><span class="nav-value">${data.navRs}</span>
     <span class="${data.change > 0 ? 'positive' : 'negative'}"><i class="${data.change > 0 ? 'pi pi-arrow-circle-up' : 'pi pi-arrow-circle-down'}" style="font-size:12px"> </i> ${parseFloat(data.change).toFixed(2)} %</span>
-    <div class="as-on">as on (${this.datepipe.transform(data.navDate, 'yyyy-MM-dd')})</div>
+    <div class="as-on">as on (${this.datepipe.transform(data.navDate, 'dd MMM y')})</div>
     </div>
     </div>
     <div class="col-6 mf-ratio">
